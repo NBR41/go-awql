@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -48,13 +49,6 @@ func NewAWQLClient(auth *Auth) *Client {
 
 // Download downloads a report by awql request
 func (c *Client) Download(awqlReq Request) (io.ReadCloser, error) {
-	var headerValue = func(v bool) string {
-		if v {
-			return "true"
-		}
-		return "false"
-	}
-
 	req, err := http.NewRequest(
 		"POST",
 		APIURL,
@@ -67,11 +61,11 @@ func (c *Client) Download(awqlReq Request) (io.ReadCloser, error) {
 	req.Header.Add("Accept", "*/*")
 	req.Header.Add("developerToken", c.DeveloperToken)
 	req.Header.Add("clientCustomerId", c.AdwordsID)
-	req.Header.Add("skipReportHeader", headerValue(awqlReq.SkipReportHeader))
-	req.Header.Add("skipColumnHeader", headerValue(awqlReq.SkipColumnHeader))
-	req.Header.Add("skipReportSummary", headerValue(awqlReq.SkipReportSummary))
-	req.Header.Add("includeZeroImpressions", headerValue(awqlReq.IncludeZeroImpressions))
-	req.Header.Add("useRawEnumValues", headerValue(awqlReq.UseRawEnumValues))
+	req.Header.Add("skipReportHeader", strconv.FormatBool(awqlReq.SkipReportHeader))
+	req.Header.Add("skipColumnHeader", strconv.FormatBool(awqlReq.SkipColumnHeader))
+	req.Header.Add("skipReportSummary", strconv.FormatBool(awqlReq.SkipReportSummary))
+	req.Header.Add("includeZeroImpressions", strconv.FormatBool(awqlReq.IncludeZeroImpressions))
+	req.Header.Add("useRawEnumValues", strconv.FormatBool(awqlReq.UseRawEnumValues))
 	resp, err := c.Client.Do(req)
 	if err != nil {
 		return nil, err
