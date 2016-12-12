@@ -1,2 +1,2 @@
-# go-awql
-awql client 
+# goawql
+awql client

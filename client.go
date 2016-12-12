@@ -1,4 +1,4 @@
-package awql
+package goawql
 
 import (
 	"fmt"
